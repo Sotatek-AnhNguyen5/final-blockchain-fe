@@ -233,6 +233,15 @@
   },
   {
     "inputs": [
+      { "internalType": "uint256", "name": "_pid", "type": "uint256" }
+    ],
+    "name": "getSotaNFT",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "uint256", "name": "_pid", "type": "uint256" },
       { "internalType": "uint256", "name": "_amount", "type": "uint256" }
     ],
@@ -322,7 +331,8 @@
         "internalType": "uint256",
         "name": "accCakePerShare",
         "type": "uint256"
-      }
+      },
+      { "internalType": "bool", "name": "isExists", "type": "bool" }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -435,16 +445,6 @@
       },
       { "internalType": "bool", "name": "isReceivedSota", "type": "bool" }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "_pid", "type": "uint256" },
-      { "internalType": "address", "name": "_user", "type": "address" }
-    ],
-    "name": "userInfoView",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },

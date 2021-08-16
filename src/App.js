@@ -4,10 +4,9 @@ import Bep20ABI from "./abis/BEP20.json";
 import MasterChef from "./abis/MasterChef.json";
 import BigNumber from "bignumber.js";
 import { useEffect, useMemo, useState } from "react";
-import { getAddress } from "ethers/lib/utils";
 
-const tokenContract = "0x0ddf2fe6d07755f826beb7a713dc25f7b7d56275";
-const masterChefAddress = "0x6f444df5e94c7a2ab2e12c265392304a926fdc0b";
+const tokenContract = "0xC4929Da14544116d3045740b4115a8edaFff0ddB";
+const masterChefAddress = "0xB033a1E87777B2abC9C2dEa12f58E3f29F6Ae714";
 const poolId = 1;
 
 function App() {
@@ -30,7 +29,7 @@ function App() {
   );
 
   const approve = () => {
-    const tx = bep20Contract
+      bep20Contract
       .approve(
         masterChefAddress,
         new BigNumber(9999999999).times(new BigNumber(10).pow(18)).toFixed()
@@ -63,22 +62,55 @@ function App() {
 
   const onWithDraw = () => {
     masterChefContract
-      .deposit(
+      .withdraw(
         poolId,
         new BigNumber(amount).times(new BigNumber(10).pow(18)).toFixed()
       )
-      .then((e) => {
+      .then(async (e) => {
+        await e.wait(1);
         alert('withdraw successfully');
+        setIndex(index++)
       })
       .catch((error) => {
         console.log("error :" + JSON.stringify(error));
       });
   };
 
+  const harvest = () => {
+    masterChefContract
+      .harvest(
+        poolId,
+        amount
+      )
+      .then(async (e) => {
+        await e.wait(1);
+        alert('harvest successfully!');
+        setIndex(index++)
+      })
+      .catch((error) => {
+        console.log("error :" + JSON.stringify(error));
+      });
+  }
+
+  const getNFT = () => {
+    masterChefContract
+      .getSotaNFT(
+        poolId,
+      )
+      .then(async (e) => {
+        await e.wait(1);
+        alert('get nft successfully');
+        setIndex(index++)
+      })
+      .catch((error) => {
+        console.log("error :" + JSON.stringify(error));
+      });
+  }
+
   useEffect(async () => {
     const accounts = await signer.getAddress();
     masterChefContract.userInfo(1, accounts).then(e => {
-      setUserInfo(e)
+      setUserInfo({...e, index})
     })
   }, [index])
 
@@ -92,6 +124,8 @@ function App() {
       <button className="approve-button" onClick={() => approve()}>Approve</button>
       <button className="deposit-button" onClick={() => onDeposit()}>Deposit</button>
       <button className="withdraw-button" onClick={() => onWithDraw()}>Withdraw</button>
+      <button className="get NFT" onClick={() => getNFT()}>get NFT</button>
+      <button className="harvest" onClick={() => harvest()}>harvest</button>
       <div>Amount : {userInfo.amount ? new BigNumber(userInfo.amount._hex).div(new BigNumber(10).pow(18)).toString() : 0}</div>
       <div>Reward Debt : {userInfo.rewardDebt ? new BigNumber(userInfo.rewardDebt._hex).toString() : 0}</div>
       <div>Last Deposit Time : {userInfo.lastDepositTime ? new BigNumber(userInfo.lastDepositTime._hex).toString() : 0}</div>
